@@ -1,6 +1,6 @@
 module Parser where
 
-data Token = Op Char | Num Int | LBr | RBr | Invalid deriving (Show, Read, Eq)
+data Token = Op Char | Num Double | LBr | RBr | Invalid deriving (Show, Read, Eq)
 
 instance Ord Token where
   compare (Op x) (Op y)   = compare (prec x) (prec y)
@@ -17,6 +17,7 @@ prec '^' = 2
 operators = "+-*/^"
 digits    = "0123456789"
 
+-- postFixCalc :: 
 
 parseInput :: String -> [Token]
 parseInput x = shunt (lex' x) [] []
@@ -49,8 +50,8 @@ getToken (x:xs)
          | isDigit x    = Num $ readNumber (x:xs)
          | otherwise    = Invalid
 
-readNumber :: String -> Int
-readNumber xs = read (getNumber "" xs) :: Int
+readNumber :: String -> Double
+readNumber xs = read (getNumber "" xs) :: Double
 
 getNumber :: String -> String -> String
 getNumber xs (y:"")
