@@ -3,14 +3,18 @@ module Parser where
 data Token = Op Char | Num Int | LBr | RBr | Invalid deriving (Show, Read, Eq)
 
 instance Ord Token where
-  compare (Op '*') (Op '-') = GT
-  compare (Op '*') (Op '+') = GT
-  compare (Op '/') (Op '-') = GT
-  compare (Op '/') (Op '+') = GT
-  compare _ _               = LT
+  compare (Op x) (Op y)   = compare (prec x) (prec y)
+  compare (Num x) (Num y) = compare x y
+  compare _ _             = LT
 
+prec :: Char -> Int
+prec '+' = 0
+prec '-' = 0
+prec '*' = 1
+prec '/' = 1
+prec '^' = 2
 
-operators = "+-*/"
+operators = "+-*/^"
 digits    = "0123456789"
 
 
