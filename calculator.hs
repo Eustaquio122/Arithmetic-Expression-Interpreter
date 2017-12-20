@@ -2,6 +2,7 @@ module Calculator where
 
 import Lexic
 import Parser
+import ErrorHandler
 
 calculate :: String -> Double
 calculate input = head $ postFixCalc (parseInput input) []

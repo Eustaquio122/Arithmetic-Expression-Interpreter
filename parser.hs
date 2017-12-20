@@ -32,13 +32,13 @@ tokenize (x:xs)
        | x == ')'     = RBr
        | isOperator x = Op x
        | isDigit x    = Num (read (x:xs) :: Double)
-       | x == 'e'     = Err xs
-       | otherwise    = Err "Parsing Error"
+       | x == 'e'     = Err ("Error while parsing number: " ++ xs)
+       | otherwise    = Err [x]
 
 getElement :: String -> String
 getElement (x:xs)
-         | isDigit x = getNumber "" (x:xs)
-         | otherwise = [x]
+         | isDigit x    = getNumber "" (x:xs)
+         | otherwise    = [x]
 
 getNumber :: String -> String -> String
 getNumber xs ('.':y:ys)
