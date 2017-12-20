@@ -16,7 +16,7 @@ shunt (Op x:xs) (y:ys) zs
 shunt (LBr:xs) ys zs       = shunt xs (LBr:ys) zs
 shunt (RBr:xs) (LBr:ys) zs = shunt xs ys zs
 shunt (RBr:xs) (y:ys) zs   = shunt (RBr:xs) ys (zs ++ [y])
-shunt _ _ _                = [Invalid]
+shunt x y z                = [Err "Parsing Error"]
 
 parse :: String -> [Token]
 parse ""       = []
@@ -32,7 +32,8 @@ tokenize (x:xs)
        | x == ')'     = RBr
        | isOperator x = Op x
        | isDigit x    = Num (read (x:xs) :: Double)
-       | otherwise    = Invalid
+       | x == 'e'     = Err xs
+       | otherwise    = Err "Parsing Error"
 
 getElement :: String -> String
 getElement (x:xs)
@@ -42,7 +43,7 @@ getElement (x:xs)
 getNumber :: String -> String -> String
 getNumber xs ('.':y:ys)
         | isDigit y = getNumber (xs ++ ['.', y]) ys
-        | otherwise = "§"
+        | otherwise = ('e':xs) ++ ['.', y]
 getNumber (x:xs) "" = [x]
 getNumber xs (y:ys)
         | isDigit y = getNumber (xs ++ [y]) ys

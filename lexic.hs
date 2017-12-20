@@ -1,6 +1,6 @@
 module Lexic where
 
-data Token = Op Char | Num Double | LBr | RBr | Invalid deriving (Show, Read, Eq)
+data Token = Op Char | Num Double | LBr | RBr | Err [Char] deriving (Show, Read, Eq)
 
 instance Ord Token where
   compare (Op x) (Op y)   = compare (prec x) (prec y)
