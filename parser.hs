@@ -39,9 +39,6 @@ getElement (x:xs)
          | isDigit x = getNumber "" (x:xs)
          | otherwise = [x]
 
--- readNumber :: String -> Double
--- readNumber xs = read (getNumber "" xs) :: Double
-
 getNumber :: String -> String -> String
 getNumber xs ('.':y:ys)
         | isDigit y = getNumber (xs ++ ['.', y]) ys
@@ -50,10 +47,6 @@ getNumber (x:xs) "" = [x]
 getNumber xs (y:ys)
         | isDigit y = getNumber (xs ++ [y]) ys
         | otherwise = xs
-
--- elementLength :: Token -> Int
--- elementLength (Num x)   = (length $ show x)
--- elementLength _         = 1
 
 isOperator x = elem x operators
 isDigit x    = elem x digits
