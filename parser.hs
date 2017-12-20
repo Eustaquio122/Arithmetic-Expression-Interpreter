@@ -17,7 +17,20 @@ prec '^' = 2
 operators = "+-*/^"
 digits    = "0123456789"
 
--- postFixCalc :: 
+calculate :: String -> Double
+calculate input = head $ postFixCalc (parseInput input) []
+
+postFixCalc :: [Token] -> [Double] -> [Double]
+postFixCalc [] xs = xs
+postFixCalc (Num x:xs) ys = postFixCalc xs (x:ys)
+postFixCalc (Op x:xs) (y1:y2:ys) = postFixCalc xs (flip (getOp x) y1 y2 : ys)
+
+getOp :: (Floating a) => Char -> (a -> a -> a)
+getOp '+' = (+)
+getOp '-' = (-)
+getOp '*' = (*)
+getOp '/' = (/)
+getOp '^' = (**)
 
 parseInput :: String -> [Token]
 parseInput x = shunt (lex' x) [] []
@@ -62,7 +75,7 @@ getNumber xs (y:ys)
            | otherwise = xs
 
 tokenLength :: Token -> Int
-tokenLength (Num x)   = length $ show x
+tokenLength (Num x)   = (length $ show x) - 2
 tokenLength _         = 1
 
 isOperator x = elem x operators
