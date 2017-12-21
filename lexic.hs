@@ -16,7 +16,7 @@ instance Show Token where
   show (Num x) = show x
   show LBr     = "("
   show RBr     = ")"
-  show (Err x) = show x
+  show (Err x) = x
 
 prec :: Char -> Int
 prec '+' = 0

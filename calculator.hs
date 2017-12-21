@@ -1,11 +1,11 @@
-module Calculator where
+module Calculator (calculate) where
 
 import Lexic
 import Parser
-import ErrorHandler
 
-calculate :: String -> Double
-calculate input = head $ postFixCalc (shunt (parse input) [] []) []
+
+calculate :: [Token] -> Double
+calculate parsedInput = head $ postFixCalc (shunt parsedInput [] []) []
 
 postFixCalc :: [Token] -> [Double] -> [Double]
 postFixCalc [] xs = xs

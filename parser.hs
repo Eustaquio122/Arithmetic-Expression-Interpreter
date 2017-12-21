@@ -1,4 +1,4 @@
-module Parser where
+module Parser (parse) where
 
 import Lexic
 
@@ -17,7 +17,7 @@ tokenize (x:xs)
        | isOperator x = Op x
        | isDigit x    = Num (read (x:xs) :: Double)
        | x == 'e'     = Err ("Error while parsing number: " ++ xs)
-       | otherwise    = Err ("Invalid token: " ++ show x ++ "\n")
+       | otherwise    = Err ("Invalid token: " ++ show x)
 
 getElement :: String -> String
 getElement (x:xs)

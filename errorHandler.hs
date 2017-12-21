@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-module ErrorHandler where
+module ErrorHandler (getErrors)  where
 
 import Lexic
 import Data.Data
@@ -9,6 +9,14 @@ validate :: [Token] -> Bool
 validate [] = True
 validate _  = False
 
+getErrors :: [Token] -> [Token]
+getErrors xs
+        | not (null parsingErrors) = parsingErrors
+        | not (null syntaxErrors)  = syntaxErrors
+        | otherwise                = []
+                where parsingErrors = getParsingErrors xs
+                      syntaxErrors  = getSyntaxErrors xs
+                  
 getParsingErrors :: [Token] -> [Token]
 getParsingErrors [] = []
 getParsingErrors (x:xs)
@@ -24,8 +32,8 @@ checkBrackets xs = bracketErrList $ countBrackets xs
 bracketErrList :: Int -> [Token]
 bracketErrList x
              | x == 0 = []
-             | x > 0  = [Err (show x ++ " unmatched '('\n")]
-             | x < 0  = [Err (show (abs x) ++ " unmatched ')'\n")]
+             | x > 0  = [Err ("Syntax error: " ++ show x ++ " unmatched '('")]
+             | x < 0  = [Err ("Syntax error: " ++ show (abs x) ++ " unmatched ')'")]
 
 countBrackets :: [Token] -> Int
 countBrackets [] = 0
@@ -38,7 +46,7 @@ checkFirst :: Token -> [Token]
 checkFirst x
          | isNum x   = []
          | isLBr x   = []
-         | otherwise = [Err ("Parsing error: expression cannot start with: " ++ show x ++ "\n")]
+         | otherwise = [Err ("Syntax error: expression cannot start with: " ++ show x)]
 
 checkSequence :: [Token] -> [Token]
 checkSequence []  = []
@@ -49,11 +57,11 @@ checkSequence (x1:x2:xs)
             | isRBr x1 && (isOp x2 || isRBr x2)   = [] ++ checkSequence xs
             | isOp x1 && (isNum x2 || isLBr x2)   = [] ++ checkSequence xs
             | otherwise                           = [Err (sequenceError x1 x2)] ++ checkSequence xs
-                    where sequenceError x y =  "Invalid token sequence: " ++ show x1 ++ " " ++ show x2 ++ "\n"
+                    where sequenceError x y =  "Syntax error: Invalid token sequence: " ++ show x1 ++ " " ++ show x2
 
 checkLast :: Token -> [Token]
 checkLast x
         | isNum x   = []
         | isRBr x   = []
-        | otherwise = [Err ("Parsing error: expression cannot end with: " ++ show x ++ "\n")]
+        | otherwise = [Err ("Syntax error: expression cannot end with: " ++ show x)]
 
