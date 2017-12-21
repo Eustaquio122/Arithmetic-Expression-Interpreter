@@ -9,8 +9,14 @@ validate :: [Token] -> Bool
 validate [] = True
 validate _  = False
 
-getErrors :: [Token] -> [Token]
-getErrors xs = checkBrackets xs ++ checkFirst (head xs) ++ checkSequence xs ++ checkLast (last xs)
+getParsingErrors :: [Token] -> [Token]
+getParsingErrors [] = []
+getParsingErrors (x:xs)
+               | isErr x   = getParsingErrors xs ++ [x]
+               | otherwise = getParsingErrors xs
+
+getSyntaxErrors :: [Token] -> [Token]
+getSyntaxErrors xs = checkBrackets xs ++ checkFirst (head xs) ++ checkSequence xs ++ checkLast (last xs)
 
 checkBrackets :: [Token] -> [Token]
 checkBrackets xs = bracketErrList $ countBrackets xs
@@ -32,7 +38,6 @@ checkFirst :: Token -> [Token]
 checkFirst x
          | isNum x   = []
          | isLBr x   = []
-         | isErr x   = [Err ("Invalid token: " ++ show x ++ "\n")]
          | otherwise = [Err ("Parsing error: expression cannot start with: " ++ show x ++ "\n")]
 
 checkSequence :: [Token] -> [Token]
@@ -50,6 +55,5 @@ checkLast :: Token -> [Token]
 checkLast x
         | isNum x   = []
         | isRBr x   = []
-        | isErr x   = [Err ("Invalid token: " ++ show x ++ "\n")]
         | otherwise = [Err ("Parsing error: expression cannot end with: " ++ show x ++ "\n")]
 
