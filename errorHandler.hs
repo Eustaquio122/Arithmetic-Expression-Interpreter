@@ -20,7 +20,7 @@ getErrors xs
 getParsingErrors :: [Token] -> [Token]
 getParsingErrors [] = []
 getParsingErrors (x:xs)
-               | isErr x   = getParsingErrors xs ++ [x]
+               | isErr x   = [x] ++ getParsingErrors xs
                | otherwise = getParsingErrors xs
 
 getSyntaxErrors :: [Token] -> [Token]
