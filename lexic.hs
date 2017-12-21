@@ -33,3 +33,32 @@ numConstr = toConstr (Num undefined)
 lbrConstr = toConstr LBr
 rbrConstr = toConstr RBr
 errConstr = toConstr (Err undefined)
+
+isOp :: Token -> Bool
+isOp x
+   | toConstr x == opConstr = True
+   | otherwise              = False
+
+isNum :: Token -> Bool
+isNum x
+   | toConstr x == numConstr = True
+   | otherwise               = False
+
+isLBr :: Token -> Bool
+isLBr x
+   | toConstr x == lbrConstr = True
+   | otherwise               = False
+
+isRBr :: Token -> Bool
+isRBr x
+   | toConstr x == rbrConstr = True
+   | otherwise               = False
+
+isErr :: Token -> Bool
+isErr x
+   | toConstr x == errConstr = True
+   | otherwise               = False
+
+isBr x = isLBr x || isRBr x
+
+
