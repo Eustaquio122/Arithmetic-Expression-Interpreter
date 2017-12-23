@@ -73,9 +73,3 @@ main = hspec $ do
                 
             it "Expression 5" $ do
                 process "5.3 * 4.34 ^3.33 - (1.45^1.234)" `shouldBe` "701.6795040477153"
-
-
-
---shouldBe f x y = f x == y
-
---equivalentTo f1 x f2 y = f1 x == f2 y
