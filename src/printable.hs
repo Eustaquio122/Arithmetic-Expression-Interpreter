@@ -1,9 +1,6 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-module Printable (
-  printableErrors,
-  printableResult,
-  )  where
+module Printable where
 
 import Lexic
 import Data.List
