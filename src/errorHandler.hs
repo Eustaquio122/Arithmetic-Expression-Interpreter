@@ -43,7 +43,7 @@ checkFirst :: Token -> [Token]
 checkFirst x
          | isNum x   = []
          | isLBr x   = []
-         | otherwise = [Err ("Syntax error: expression cannot start with: " ++ show x)]
+         | otherwise = [Err ("Syntax error: expression cannot start with " ++ show x)]
 
 checkSequence :: [Token] -> [Token]
 checkSequence []  = []
@@ -60,5 +60,5 @@ checkLast :: Token -> [Token]
 checkLast x
         | isNum x   = []
         | isRBr x   = []
-        | otherwise = [Err ("Syntax error: expression cannot end with: " ++ show x)]
+        | otherwise = [Err ("Syntax error: expression cannot end with " ++ show x)]
 
