@@ -246,7 +246,26 @@ main = hspec $ do
                     process "2+3 ^" `shouldBe` "Syntax error: expression cannot end with '^'"
 
                 it "Ends with '('" $ do
-                    process "2+3 )(" `shouldBe` "Syntax error: expression cannot end with ("
+                    process "2+3) + (" `shouldBe` "Syntax error: expression cannot end with ("
 
+            describe "Invalid token sequences" $ do
+
+                it "Two numbers in a row" $ do
+                    process "2+3 5" `shouldBe` "Syntax error: Invalid token sequence: 3 5"
+
+                it "Invalid operator sequence" $ do
+                    process "2+*3" `shouldBe` "Syntax error: Invalid token sequence: '+' '*'"
+
+                it "Operator followed by right parens" $ do
+                    process "(2+3 *)" `shouldBe` "Syntax error: Invalid token sequence: '*' )"
+
+                it "Left parens followed by operator" $ do
+                    process "(*2+3)" `shouldBe` "Syntax error: Invalid token sequence: ( '*'"
+
+                it "Right parens followed by left parens" $ do
+                    process "(2+3)(2)" `shouldBe` "Syntax error: Invalid token sequence: ) ("
+
+                it "Empty parens" $ do
+                    process "2+3 - ()" `shouldBe` "Syntax error: Invalid token sequence: ( )"
 
           
