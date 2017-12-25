@@ -1,8 +1,9 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-module ErrorHandler (getErrors)  where
+module ErrorHandler where --(getErrors)  where
 
 import Lexic
+import Printable
 import Data.Data
 
 
@@ -49,12 +50,13 @@ checkSequence :: [Token] -> [Token]
 checkSequence []  = []
 checkSequence [x] = []
 checkSequence (x1:x2:xs)
-            | isNum x1 && (isOp x2 || isBr x2)    = [] ++ checkSequence xs
-            | isLBr x1 && (isNum x2 || isLBr x2)  = [] ++ checkSequence xs
-            | isRBr x1 && (isOp x2 || isRBr x2)   = [] ++ checkSequence xs
-            | isOp x1 && (isNum x2 || isLBr x2)   = [] ++ checkSequence xs
-            | otherwise                           = [Err (sequenceError x1 x2)] ++ checkSequence xs
-                    where sequenceError x y =  "Syntax error: Invalid token sequence: " ++ show x1 ++ " " ++ show x2
+            | isNum x1 && (isOp x2 || isBr x2)    = [] ++ checkSequence (x2:xs)
+            | isLBr x1 && (isNum x2 || isLBr x2)  = [] ++ checkSequence (x2:xs)
+            | isRBr x1 && (isOp x2 || isRBr x2)   = [] ++ checkSequence (x2:xs)
+            | isOp x1 && (isNum x2 || isLBr x2)   = [] ++ checkSequence (x2:xs)
+            | isNum x1 && isNum x2                = [Err (sequenceError (processDot $ show x1) (processDot $ show x2))] ++ checkSequence xs
+            | otherwise                           = [Err (sequenceError (show x1) (show x2))] ++ checkSequence xs
+                    where sequenceError a b =  "Syntax error: Invalid token sequence: " ++ a ++ " " ++ b
 
 checkLast :: Token -> [Token]
 checkLast x
