@@ -162,7 +162,7 @@ main = hspec $ do
             it "Spaces are redundant next to all operators" $ do
                 process "2+3-2*3/(2^3)" `shouldBe` process " 2 +  3 -  2 * 3  / ( 2   ^ 3 ) "
               
-        describe "Complex inputs" $ do
+        describe "Complex valid inputs" $ do
 
             it "(67 + 2 * 3 - 67 + 2/1 - 7)" $ do
                 process "(67 + 2 * 3 - 67 + 2/1 - 7)" `shouldBe` "1"
@@ -181,3 +181,72 @@ main = hspec $ do
 
             it "-2.34 +--+----+ (3.23 -0.34^3) +- (-2) * 4" $ do
                 process "2.34 +--+----+ (3.23 -0.34^3) +- (-2) * 4" `shouldBe` "13.530695999999999"
+
+
+    describe "Error Handling" $ do
+
+        describe "Invalid Tokens" $ do
+
+            it "A digit" $ do
+                process "2+l" `shouldBe` "Invalid token: 'l'"
+
+            it "Unrecognised operator" $ do
+                process "2#3" `shouldBe` "Invalid token: '#'"
+
+            it "A corrupted number" $ do
+                process "2*2.-43" `shouldBe` "Error while parsing number: 2.-"
+
+        describe "Syntax Errors" $ do
+
+            describe "Unmatched parens" $ do
+          
+                it "Single unmatched left parens" $ do
+                    process "2+2 * ((4)" `shouldBe` "Syntax error: 1 unmatched '('"
+
+                it "Single unmatched right parens" $ do
+                    process "2+2 * (4))" `shouldBe` "Syntax error: 1 unmatched ')'"
+
+                it "Multiple unmatched left parens" $ do
+                    process "2+2 * ((4) - (((3 - 1)" `shouldBe` "Syntax error: 3 unmatched '('"
+
+                it "Single unmatched right parens" $ do
+                    process "2+2 * (4))) - (3 - 1))))" `shouldBe` "Syntax error: 5 unmatched ')'"
+
+
+            describe "Invalid beginning token" $ do
+
+                it "Starts with '*'" $ do
+                    process "* 2+3" `shouldBe` "Syntax error: expression cannot start with '*'"
+
+                it "Starts with '/'" $ do
+                    process "/ 2+3" `shouldBe` "Syntax error: expression cannot start with '/'"
+
+                it "Starts with '^'" $ do
+                    process "^ 2+3" `shouldBe` "Syntax error: expression cannot start with '^'"
+
+                it "Starts with ')'" $ do
+                    process ") +2+ (3" `shouldBe` "Syntax error: expression cannot start with )"
+
+
+            describe "Invalid ending token" $ do
+
+                it "Ends with '+'" $ do
+                    process "2+3 +" `shouldBe` "Syntax error: expression cannot end with '+'"
+
+                it "Ends with '-'" $ do
+                    process "2+3 -" `shouldBe` "Syntax error: expression cannot end with '-'"
+
+                it "Ends with '*'" $ do
+                    process "2+3 *" `shouldBe` "Syntax error: expression cannot end with '*'"
+
+                it "Ends with '/'" $ do
+                    process "2+3 /" `shouldBe` "Syntax error: expression cannot end with '/'"
+
+                it "Ends with '^'" $ do
+                    process "2+3 ^" `shouldBe` "Syntax error: expression cannot end with '^'"
+
+                it "Ends with '('" $ do
+                    process "2+3 )(" `shouldBe` "Syntax error: expression cannot end with ("
+
+
+          
