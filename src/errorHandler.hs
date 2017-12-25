@@ -5,9 +5,6 @@ module ErrorHandler (getErrors)  where
 import Lexic
 import Data.Data
 
-validate :: [Token] -> Bool
-validate [] = True
-validate _  = False
 
 getErrors :: [Token] -> [Token]
 getErrors xs
