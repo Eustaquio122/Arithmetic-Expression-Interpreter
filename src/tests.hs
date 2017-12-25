@@ -196,6 +196,12 @@ main = hspec $ do
             it "A corrupted number" $ do
                 process "2*2.-43" `shouldBe` "Error while parsing number: 2.-"
 
+            it "A number with two consecutive dots" $ do
+                process "2*2..43" `shouldBe` "Error while parsing number: 2.."
+
+            it "A number with two non-consecutive dots" $ do
+                process "2*2.4.3" `shouldBe` "Error while parsing number: 2.4.3"
+
         describe "Syntax Errors" $ do
 
             describe "Unmatched parens" $ do
@@ -272,5 +278,20 @@ main = hspec $ do
                 it "Numerous syntax errors and one invalid character - outputs 'invalid token' only" $ do
                     process "2+3 ) *-/ 5))) (() k" `shouldBe`"Invalid token: 'k'"
 
+
+            describe "Complex invalid inputs" $ do
+
+                it "2 + 4 # k - ;" $ do
+                    process "2 + 4 # k - ;" `shouldBe` "Invalid token: '#'\nInvalid token: 'k'\nInvalid token: ';'"
+
+                it "(2)) + (17*/2-30) (5-)+ -" $ do
+                    process "(2)) + (17*/2-30) (5-)+ -" `shouldBe` "Syntax error: attempt to close unopened parens at ) '+'\nSyntax error: Invalid token sequence: '*' '/'\nSyntax error: Invalid token sequence: ) (\nSyntax error: Invalid token sequence: '-' )\nSyntax error: expression cannot end with '-'"
+
+                it "(((()) +--+* 8^(5 + (" $ do
+                    process "(((()) +--+* 8^(5 + (" `shouldBe` "Syntax error: 4 unmatched '('\nSyntax error: Invalid token sequence: ( )\nSyntax error: Invalid token sequence: '+' '*'\nSyntax error: expression cannot end with ("
+
+                it "* 3 + 2^^(^2) ---++ 8.455" $ do
+                    process "* 3 + 2^^(^2) ---++ 8.455" `shouldBe` "Syntax error: expression cannot start with '*'\nSyntax error: Invalid token sequence: '^' '^'\nSyntax error: Invalid token sequence: ( '^'"
+                
 
 
