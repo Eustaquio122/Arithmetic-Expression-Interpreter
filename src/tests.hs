@@ -73,6 +73,12 @@ main = hspec $ do
             it "Reads invalid token as error" $ do
                 show (parse "k") `shouldBe` show [Err "Invalid token: 'k'"]
 
+            it "Identifies negative numbers at the beginning" $ do
+                show (parse "-5 + 3") `shouldBe` "[-5.0,'+',3.0]"
+
+            it "Simplifies consecutive addition/subtraction operators" $ do
+                show (parse "5 -+ 4 -- 3 ++ 2 -+- 1 --- 0") `shouldBe` "[5.0,'-',4.0,'+',3.0,'+',2.0,'+',1.0,'-',0.0]"
+                     
             it "Reads 2.3456 - (((4)))" $ do
                 show (parse "2.3456 - (((4)))") `shouldBe` "[2.3456,'-',(,(,(,4.0,),),)]"
 
@@ -81,6 +87,10 @@ main = hspec $ do
 
             it "Reads 2 / (5 - 1) * 7 k" $ do
                 show (parse "2 / (5 - 1) * 7 k") `shouldBe` "[2.0,'/',(,5.0,'-',1.0,),'*',7.0,Invalid token: 'k']"
+
+            it "Reads -5 -+--+ 1 + (-1 + 3) + (1 -2) + (-1)" $ do
+                show (parse "-5 -+--+ 1 + (-1 + 3) + (1 -2) + (-1)") `shouldBe` "[-5.0,'-',1.0,'+',(,-1.0,'+',3.0,),'+',(,1.0,'-',2.0,),'+',(,-1.0,)]"
+
 
         describe "Converts to postfix notation - Oxford Math Center Website examples" $ do
 
@@ -168,3 +178,6 @@ main = hspec $ do
                 
             it "5.3 * 4.34 ^3.33 - (1.45^1.234)" $ do
                 process "5.3 * 4.34 ^3.33 - (1.45^1.234)" `shouldBe` "701.6795040477153"
+
+            it "-2.34 +--+----+ (3.23 -0.34^3) +- (-2) * 4" $ do
+                process "2.34 +--+----+ (3.23 -0.34^3) +- (-2) * 4" `shouldBe` "13.530695999999999"
