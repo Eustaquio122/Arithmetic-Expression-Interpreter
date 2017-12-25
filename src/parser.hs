@@ -4,7 +4,7 @@ import Lexic
 
 
 parse :: String -> [Token]
-parse xs = analise . checkInitialMinus $ tokenize xs
+parse xs = analise . checkInitialOp $ tokenize xs
 
 analise :: [Token] -> [Token]
 analise []                    = []
@@ -19,9 +19,10 @@ analise (Op '-':Op y:xs)
 analise (LBr:Op '-':Num y:xs) = (LBr:Num (-y):analise xs)
 analise (x:xs)                = (x:analise xs)
 
-checkInitialMinus :: [Token] -> [Token]
-checkInitialMinus (Op '-':Num x:xs) = (Num (-x):xs)
-checkInitialMinus xs                = xs
+checkInitialOp :: [Token] -> [Token]
+checkInitialOp (Op '-':Num x:xs) = (Num (-x):xs)
+checkInitialOp (Op '+':Num x:xs) = (Num x:xs)
+checkInitialOp xs                = xs
 
 tokenize :: String -> [Token]
 tokenize ""       = []
