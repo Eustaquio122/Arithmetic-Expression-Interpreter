@@ -4,7 +4,7 @@ import Lexic
 
 
 parse :: String -> [Token]
-parse xs = analise . checkInitialOp $ tokenize xs
+parse xs = checkInitialOp . analise $ tokenize xs
 
 analise :: [Token] -> [Token]
 analise []                    = []
