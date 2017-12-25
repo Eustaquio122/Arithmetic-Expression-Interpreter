@@ -267,3 +267,10 @@ main = hspec $ do
                     process "2+3 - ()" `shouldBe` "Syntax error: Invalid token sequence: ( )"
 
           
+            describe "Prioritises invalid inputs over syntax ones" $ do
+
+                it "Numerous syntax errors and one invalid character - outputs 'invalid token' only" $ do
+                    process "2+3 ) *-/ 5))) (() k" `shouldBe`"Invalid token: 'k'"
+
+
+
