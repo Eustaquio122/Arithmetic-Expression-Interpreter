@@ -48,9 +48,10 @@ getElement (x:xs)
 
 getNumber :: String -> String -> String
 getNumber xs ('.':y:ys)
-        | isDigit y = getNumber (xs ++ ['.', y]) ys
-        | otherwise = ('e':xs) ++ ['.', y]
-getNumber (x:xs) "" = [x]
+        | elem '.' xs = ('e':xs) ++ ['.', y]
+        | isDigit y   = getNumber (xs ++ ['.', y]) ys
+        | otherwise   = ('e':xs) ++ ['.', y]
+getNumber xs "" = xs
 getNumber xs (y:ys)
         | isDigit y = getNumber (xs ++ [y]) ys
         | otherwise = xs
