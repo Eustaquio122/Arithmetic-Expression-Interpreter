@@ -2,6 +2,7 @@ module Parser (parse) where
 
 import Lexic
 
+
 parse :: String -> [Token]
 parse xs = analise . checkInitialMinus $ tokenize xs
 
