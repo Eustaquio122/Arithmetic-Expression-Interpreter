@@ -203,14 +203,14 @@ main = hspec $ do
                 it "Single unmatched left parens" $ do
                     process "2+2 * ((4)" `shouldBe` "Syntax error: 1 unmatched '('"
 
-                it "Single unmatched right parens" $ do
-                    process "2+2 * (4))" `shouldBe` "Syntax error: 1 unmatched ')'"
-
                 it "Multiple unmatched left parens" $ do
                     process "2+2 * ((4) - (((3 - 1)" `shouldBe` "Syntax error: 3 unmatched '('"
 
-                it "Single unmatched right parens" $ do
-                    process "2+2 * (4))) - (3 - 1))))" `shouldBe` "Syntax error: 5 unmatched ')'"
+                it "Unmatched right parens in the middle of input" $ do
+                    process "2+2 * (4)) + 3" `shouldBe` "Syntax error: attempt to close unopened parens at ) '+'"
+
+                it "Unmatched left parens at the end of input" $ do
+                    process "2+2 * (4))" `shouldBe` "Syntax error: attempt to close unopened parens at the end of input"
 
 
             describe "Invalid beginning token" $ do
@@ -223,9 +223,6 @@ main = hspec $ do
 
                 it "Starts with '^'" $ do
                     process "^ 2+3" `shouldBe` "Syntax error: expression cannot start with '^'"
-
-                it "Starts with ')'" $ do
-                    process ") +2+ (3" `shouldBe` "Syntax error: expression cannot start with )"
 
 
             describe "Invalid ending token" $ do
@@ -246,7 +243,8 @@ main = hspec $ do
                     process "2+3 ^" `shouldBe` "Syntax error: expression cannot end with '^'"
 
                 it "Ends with '('" $ do
-                    process "2+3) + (" `shouldBe` "Syntax error: expression cannot end with ("
+                    process "2+3 + (" `shouldBe` "Syntax error: 1 unmatched '('\nSyntax error: expression cannot end with ("
+
 
             describe "Invalid token sequences" $ do
 
