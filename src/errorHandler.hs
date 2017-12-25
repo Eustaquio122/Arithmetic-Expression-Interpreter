@@ -22,23 +22,20 @@ getParsingErrors (x:xs)
                | otherwise = getParsingErrors xs
 
 getSyntaxErrors :: [Token] -> [Token]
-getSyntaxErrors xs = checkBrackets xs ++ checkFirst (head xs) ++ checkSequence xs ++ checkLast (last xs)
+getSyntaxErrors xs = checkParens xs 0 ++ checkFirst (head xs) ++ checkSequence xs ++ checkLast (last xs)
 
-checkBrackets :: [Token] -> [Token]
-checkBrackets xs = bracketErrList $ countBrackets xs
-
-bracketErrList :: Int -> [Token]
-bracketErrList x
-             | x == 0 = []
-             | x > 0  = [Err ("Syntax error: " ++ show x ++ " unmatched '('")]
-             | x < 0  = [Err ("Syntax error: " ++ show (abs x) ++ " unmatched ')'")]
-
-countBrackets :: [Token] -> Int
-countBrackets [] = 0
-countBrackets (x:xs)
-            | show x == "(" = 1 + countBrackets xs
-            | show x == ")" = countBrackets xs - 1
-            | otherwise     = countBrackets xs
+checkParens :: [Token] -> Int -> [Token]
+checkParens [] x
+          | x > 0      = [Err ("Syntax error: " ++ show x ++ " unmatched '('")]
+          | otherwise  = []
+checkParens (LBr:xs) y = checkParens xs (y + 1)
+checkParens (RBr:xs) y
+          | y > 0      = checkParens xs (y - 1)
+          | otherwise  = [Err ("Syntax error: attempt to close unopened parens at " ++ followingToken xs)]
+                 where followingToken rest
+                                    | rest == []   = "the end of input"
+                                    | otherwise = ") " ++ show (head xs)
+checkParens (x:xs) y   = checkParens xs y
 
 checkFirst :: Token -> [Token]
 checkFirst x
