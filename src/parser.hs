@@ -11,23 +11,23 @@ analise []                    = []
 analise (Op '+':Op y:xs)
       | y == '-'              = analise (Op '-':xs)
       | y == '+'              = analise (Op '+':xs)
-      | otherwise             = (Op '+':analise (Op y:xs))
+      | otherwise             = Op '+':analise (Op y:xs)
 analise (Op '-':Op y:xs)
       | y == '+'              = analise (Op '-':xs)
       | y == '-'              = analise (Op '+':xs)
-      | otherwise             = (Op '-':analise (Op y:xs))
-analise (LBr:Op '-':Num y:xs) = (LBr:Num (-y):analise xs)
-analise (x:xs)                = (x:analise xs)
+      | otherwise             = Op '-':analise (Op y:xs)
+analise (LBr:Op '-':Num y:xs) = LBr:Num (-y):analise xs
+analise (x:xs)                = x:analise xs
 
 checkInitialOp :: [Token] -> [Token]
-checkInitialOp (Op '-':Num x:xs) = (Num (-x):xs)
-checkInitialOp (Op '+':Num x:xs) = (Num x:xs)
+checkInitialOp (Op '-':Num x:xs) = Num (-x):xs
+checkInitialOp (Op '+':Num x:xs) = Num x:xs
 checkInitialOp xs                = xs
 
 tokenize :: String -> [Token]
 tokenize ""       = []
 tokenize (' ':xs) = tokenize xs
-tokenize xs       = (headToken:tokenize rest)
+tokenize xs       = headToken:tokenize rest
                       where headToken = elementToToken element
                             element   = getElement xs
                             rest      = drop (length element) xs
@@ -48,7 +48,7 @@ getElement (x:xs)
 
 getNumber :: String -> String -> String
 getNumber xs ('.':y:ys)
-        | elem '.' xs = ('e':xs) ++ ['.', y]
+        | '.' `elem` xs = ('e':xs) ++ ['.', y]
         | isDigit y   = getNumber (xs ++ ['.', y]) ys
         | otherwise   = ('e':xs) ++ ['.', y]
 getNumber xs "" = xs
@@ -57,8 +57,8 @@ getNumber xs (y:ys)
         | otherwise = xs
 
 
-isOperator x = elem x operators
-isDigit x    = elem x digits
+isOperator x = x `elem` operators
+isDigit x    = x `elem` digits
 
 
 

@@ -4,7 +4,7 @@ module Lexic where
 
 import Data.Data
 
-data Token = Op Char | Num Double | LBr | RBr | Err [Char] deriving (Read, Typeable, Data)
+data Token = Op Char | Num Double | LBr | RBr | Err String deriving (Read, Typeable, Data)
 
 instance Ord Token where
   compare (Op x) (Op y)   = compare (prec x) (prec y)

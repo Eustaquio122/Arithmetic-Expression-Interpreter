@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
-
 module ErrorHandler where --(getErrors)  where
 
 import Lexic
@@ -18,7 +16,7 @@ getErrors xs
 getParsingErrors :: [Token] -> [Token]
 getParsingErrors [] = []
 getParsingErrors (x:xs)
-               | isErr x   = (x:getParsingErrors xs)
+               | isErr x   = x:getParsingErrors xs
                | otherwise = getParsingErrors xs
 
 getSyntaxErrors :: [Token] -> [Token]
@@ -33,7 +31,7 @@ checkParens (RBr:xs) y
           | y > 0      = checkParens xs (y - 1)
           | otherwise  = [Err ("Syntax error: attempt to close unopened parens at " ++ followingToken xs)]
                  where followingToken rest
-                                    | rest == []   = "the end of input"
+                                    | null rest = "the end of input"
                                     | otherwise = ") " ++ show (head xs)
 checkParens (x:xs) y   = checkParens xs y
 
@@ -51,8 +49,8 @@ checkSequence (x1:x2:xs)
             | isLBr x1 && (isNum x2 || isLBr x2)  = [] ++ checkSequence (x2:xs)
             | isRBr x1 && (isOp x2 || isRBr x2)   = [] ++ checkSequence (x2:xs)
             | isOp x1 && (isNum x2 || isLBr x2)   = [] ++ checkSequence (x2:xs)
-            | isNum x1 && isNum x2                = [Err (sequenceError (processDot $ show x1) (processDot $ show x2))] ++ checkSequence xs
-            | otherwise                           = [Err (sequenceError (show x1) (show x2))] ++ checkSequence xs
+            | isNum x1 && isNum x2                = Err (sequenceError (processDot $ show x1) (processDot $ show x2)) : checkSequence xs
+            | otherwise                           = Err (sequenceError (show x1) (show x2)) : checkSequence xs
                     where sequenceError a b =  "Syntax error: Invalid token sequence: " ++ a ++ " " ++ b
 
 checkLast :: Token -> [Token]

@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
-
 module Main where
 
 import Lexic
@@ -24,6 +22,6 @@ main :: IO ()
 main =
     putStrLn "Enter expression ('q' to quit):" >>
     getLine >>= \expression ->
-                  when (expression /= "q") $ (putStrLn $ process expression) >> main
+                  when (expression /= "q") $ putStrLn (process expression) >> main
 
     
