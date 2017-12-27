@@ -18,7 +18,7 @@ Clone this repository.
 
 Make sure you have stack on your system.
 
-Go to Interpreter and run:
+Go to /Interpreter and run:
 
 ```
 > stack install
