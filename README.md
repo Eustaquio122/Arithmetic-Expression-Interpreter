@@ -16,51 +16,59 @@ Using the Program
 
 Clone this repository.
 
-Go to src and either run:
+Make sure you have stack on your system.
+
+Go to Interpreter and run:
 
 ```
-> ghc -o Intepreter --make main.hs
-> ./Interpreter
+> stack install
+> Interpreter-exe
 
 ```
 
-or:
-
-```
-> runhaskell main.hs
-
-```
 
 Example Usage:
 ----------------
 
 ```
-~/repos/haskell/arithmetic-interpreter/src > ghc -o Intepreter --make main.hs
-~/repos/haskell/arithmetic-interpreter/src > ./Intepreter
+~/repos/haskell/arithmetic-interpreter/Interpreter > Interpreter-exe
+
 Enter expression ('q' to quit):
 7 * (2.3^(1.2*0.456)) /1.23
-8.97698295239268
+Expression: 7 * (2.3^(1.2*0.456)) /1.23
+Result: 8.97698295239268
+
 Enter expression ('q' to quit):
 8 - (((((4))))) + ((((3)-1)))
-6
+Expression: 8 - (((((4))))) + ((((3)-1)))
+Result: 6
+
 Enter expression ('q' to quit):
 -3^2     * (2/1) -----++++ 4
-14
+Expression: -3^2     * (2/1) -----++++ 4
+Result: 14
+
 Enter expression ('q' to quit):
 * 4 - (5 * 2) - / 3 )
+Expression: * 4 - (5 * 2) - / 3 )
 Syntax error: attempt to close unopened parens at the end of input
 Syntax error: expression cannot start with '*'
 Syntax error: Invalid token sequence: '-' '/'
+
 Enter expression ('q' to quit):
 5 - 3 + k * (8 # 2)
+Expression: 5 - 3 + k * (8 # 2)
 Invalid token: 'k'
 Invalid token: '#'
+
 Enter expression ('q' to quit):
 (((((((4) + 3
+Expression: (((((((4) + 3
 Syntax error: 6 unmatched '('
+
 Enter expression ('q' to quit):
 q
-~/repos/haskell/arithmetic-interpreter/src >
+~/repos/haskell/arithmetic-interpreter/Interpreter >
 
 ```
 
@@ -68,10 +76,10 @@ q
 Tests
 =======
 
-To run the tests, go to src and:
+To run the tests, go to /Interpreter and run:
 
 ```
-> runhaskell tests.hs
+> stack test
 
 ```
 
