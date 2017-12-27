@@ -1,13 +1,11 @@
-module Main where
+module Printable where
 
 import Lexic
 import Parser
 import ErrorHandler
 import Calculator
-import Printable
 
-import Data.Char
-import Control.Monad
+import Data.List
 
 
 process :: String -> String
@@ -18,10 +16,7 @@ process input
                     result      = calculate parsedInput
                     parsedInput = parse input
 
-main :: IO ()
-main =
-    putStrLn "Enter expression ('q' to quit):" >>
-    getLine >>= \expression ->
-                  when (expression /= "q") $ putStrLn (process expression) >> main
+printableErrors xs = intercalate "\n" (map show xs)
 
-    
+printableResult xs = processDot $ show xs
+

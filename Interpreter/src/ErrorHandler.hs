@@ -1,7 +1,6 @@
-module ErrorHandler where --(getErrors)  where
+module ErrorHandler (getErrors, processDot)  where
 
 import Lexic
-import Printable
 import Data.Data
 
 
@@ -59,3 +58,10 @@ checkLast x
         | isRBr x   = []
         | otherwise = [Err ("Syntax error: expression cannot end with " ++ show x)]
 
+processDot :: String -> String
+processDot []          = []
+processDot ('.':xs)
+         | allZeros xs = []
+         | otherwise   = '.':xs
+                 where allZeros = all (== '0') 
+processDot (x:xs)      = x : processDot xs

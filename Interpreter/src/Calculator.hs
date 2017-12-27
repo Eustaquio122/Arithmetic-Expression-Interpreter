@@ -1,4 +1,4 @@
-module Calculator where --(calculate) where
+module Calculator (calculate, shunt) where
 
 import Lexic
 import Parser

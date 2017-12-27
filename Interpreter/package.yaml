@@ -1,0 +1,45 @@
+name:                Interpreter
+version:             0.1.0.0
+github:              "Eustaquio122/Arithmetic-Expression-Interpreter"
+license:             BSD3
+author:              Eustaquio122
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+synopsis:            A simple Haskell arithmetic interpreter
+
+ghc-options: -Wall -Werror
+
+dependencies:
+- base ==4.*
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - Calculator
+    - Printable
+    - ErrorHandler
+    - Parser
+    - Lexic
+
+executables:
+  Interpreter-exe:
+    main:                Main.hs
+    source-dirs:         app
+    dependencies:
+      - Interpreter
+
+tests:
+  Interpreter-test:
+    main:                Spec.hs
+    source-dirs:
+      - test
+      - .
+    dependencies:
+      - Interpreter
+      - hspec
+      - QuickCheck
+    ghc-options: -main-is Test
+
