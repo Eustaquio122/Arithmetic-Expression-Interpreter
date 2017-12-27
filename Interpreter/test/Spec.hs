@@ -116,41 +116,41 @@ main = hspec $ do
         describe "Simple expressions" $ do
 
             it "Addition - 2+3" $
-                process "2+3" `shouldBe` "5"
+                process "2+3" `shouldBe` "Result: 5"
 
             it "Subtraction - 2-3" $
-                process "2-3" `shouldBe` "-1"
+                process "2-3" `shouldBe` "Result: -1"
 
             it "Multiplication - 2*3" $
-                process "2*3" `shouldBe` "6"
+                process "2*3" `shouldBe` "Result: 6"
 
             it "Division - 6/3" $
-                process "6/3" `shouldBe` "2"
+                process "6/3" `shouldBe` "Result: 2"
 
             it "Exponentiation - 2^3" $
-                process "2^3" `shouldBe` "8"
+                process "2^3" `shouldBe` "Result: 8"
 
         describe "Precedence" $ do
 
             it "Parens - 2*(2-3)" $
-                process "2*(2-3)" `shouldBe` "-2" 
+                process "2*(2-3)" `shouldBe` "Result: -2" 
 
             it "Multiplication over Addition - 2+3*2" $
-                process "2+3*2" `shouldBe` "8"
+                process "2+3*2" `shouldBe` "Result: 8"
 
             it "Multiplication and Division at same level - 4/2*2" $
-                process "4/2*2" `shouldBe` "4"
+                process "4/2*2" `shouldBe` "Result: 4"
 
             it "Exponentiation over Multiplication - 2*3^2" $
-                process "2*3^2" `shouldBe` "18"
+                process "2*3^2" `shouldBe` "Result: 18"
 
         describe "Decimal" $ do
 
             it "Result needs decimal - 3/4" $
-                process "3/4" `shouldBe` "0.75"
+                process "3/4" `shouldBe` "Result: 0.75"
               
             it "Decimal is redundant (all zeros) - 8/4" $
-                process "8/4" `shouldBe` "2"
+                process "8/4" `shouldBe` "Result: 2"
 
         describe "Whitespace" $ do
 
@@ -163,22 +163,22 @@ main = hspec $ do
         describe "Complex valid inputs" $ do
 
             it "(67 + 2 * 3 - 67 + 2/1 - 7)" $
-                process "(67 + 2 * 3 - 67 + 2/1 - 7)" `shouldBe` "1"
+                process "(67 + 2 * 3 - 67 + 2/1 - 7)" `shouldBe` "Result: 1"
 
             it "(2) + (17*2-30) * (5)+2 - (8/2)*4" $
-                process "(2) + (17*2-30) * (5)+2 - (8/2)*4" `shouldBe` "8"
+                process "(2) + (17*2-30) * (5)+2 - (8/2)*4" `shouldBe` "Result: 8"
 
             it "(( ((2)) + 4))*((5))" $
-                process "(( ((2)) + 4))*((5))" `shouldBe` "30"
+                process "(( ((2)) + 4))*((5))" `shouldBe` "Result: 30"
 
             it "32.4 * 3 + 2^2^(2^2)" $
-                process "32.4 * 3 + 2^2^(2^2)" `shouldBe` "353.2"
+                process "32.4 * 3 + 2^2^(2^2)" `shouldBe` "Result: 353.2"
                 
             it "5.3 * 4.34 ^3.33 - (1.45^1.234)" $
-                process "5.3 * 4.34 ^3.33 - (1.45^1.234)" `shouldBe` "701.6795040477153"
+                process "5.3 * 4.34 ^3.33 - (1.45^1.234)" `shouldBe` "Result: 701.6795040477153"
 
             it "-2.34 +--+----+ (3.23 -0.34^3) +- (-2) * 4" $
-                process "2.34 +--+----+ (3.23 -0.34^3) +- (-2) * 4" `shouldBe` "13.530695999999999"
+                process "2.34 +--+----+ (3.23 -0.34^3) +- (-2) * 4" `shouldBe` "Result: 13.530695999999999"
 
 
     describe "Error Handling" $ do
