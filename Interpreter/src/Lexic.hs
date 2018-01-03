@@ -7,9 +7,9 @@ import Data.Data
 data Token = Op Char | Num Double | LBr | RBr | Err String deriving (Read, Typeable, Data)
 
 instance Ord Token where
-  compare (Op x) (Op y)   = compare (prec x) (prec y)
-  compare (Num x) (Num y) = compare x y
-  compare _ _             = GT
+  compare (Op x) (Op y)     = compare (prec x) (prec y)
+  compare (Num x) (Num y)   = compare x y
+  compare _ _               = GT
 
 instance Eq Token where
   Op x == Op y   = prec x == prec y
@@ -29,6 +29,7 @@ prec '-' = 0
 prec '*' = 1
 prec '/' = 1
 prec '^' = 2
+prec _   = 0
 
 operators = "+-*/^"
 digits    = "0123456789"

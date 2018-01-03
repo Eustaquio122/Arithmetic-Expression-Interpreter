@@ -5,12 +5,10 @@ license:             BSD3
 author:              Eustaquio122
 
 extra-source-files:
-- README.md
+- ../README.md
 - ChangeLog.md
 
 synopsis:            A simple Haskell arithmetic interpreter
-
-ghc-options: -Wall -Werror
 
 dependencies:
 - base ==4.*
